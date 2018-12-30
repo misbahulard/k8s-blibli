@@ -28,6 +28,8 @@ spec:
         app: wordpress
         tier: mariadb
     spec:
+      nodeSelector:
+        storage: persistent
       containers:
       - image: misbahulard/mariadb
         name: mariadb
