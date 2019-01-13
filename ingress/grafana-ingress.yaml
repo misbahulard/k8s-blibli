@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+  namespace: monitoring
+  #annotations:
+  #  nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  tls:
+  - hosts:
+    - grafana.misbah.id
+    secretName: ingress
+  rules:
+  - host: grafana.misbah.id
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: grafana
+            servicePort: 3000

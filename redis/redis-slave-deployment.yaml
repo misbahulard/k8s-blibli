@@ -22,6 +22,7 @@ spec:
     matchLabels: 
       app: wordpress 
       tier: redis-slave
+  replicas: 2
   template: 
     metadata: 
       labels: 

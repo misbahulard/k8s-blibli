@@ -7,6 +7,9 @@ metadata:
 spec:
   ports:
     - port: 80
+      name: http
+    - port: 443
+      name: https
   selector:
     app: wordpress
     tier: nginx
@@ -34,15 +37,27 @@ spec:
         ports:
         - containerPort: 80
           name: nginx
+        - containerPort: 443
+          name: nginx-tls
         volumeMounts:
         - name: nginx-persistent-storage
           mountPath: /var/www/html/wp-content
+        - name: nginx-secret
+          mountPath: /etc/nginx/tls
+        - name: nginx-configmap
+          mountPath: /etc/nginx/conf.d
         env:
           - name: PHP_HOST
             value: phpfpm
           - name: DB_HOST
             value: mariadb
       volumes:
+      - name: nginx-secret
+        secret:
+          secretName: nginx
+      - name: nginx-configmap
+        configMap:
+          name: nginx-vh
       - name: nginx-persistent-storage
         persistentVolumeClaim:
           claimName: wordpress-pv-claim

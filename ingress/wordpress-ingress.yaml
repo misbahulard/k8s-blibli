@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: wordpress-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  tls:
+  - hosts:
+    - misbah.id
+    secretName: ingress
+  rules:
+  - host: misbah.id
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: nginx
+            servicePort: 443

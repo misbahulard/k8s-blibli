@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: alertmanager-ingress
+  namespace: monitoring
+  #annotations:
+  #  nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  tls:
+  - hosts:
+    - alertmanager.misbah.id
+    secretName: ingress
+  rules:
+  - host: alertmanager.misbah.id
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: alertmanager-main
+            servicePort: 9093
+
