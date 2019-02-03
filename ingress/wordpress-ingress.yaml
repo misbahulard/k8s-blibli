@@ -8,7 +8,7 @@ spec:
   tls:
   - hosts:
     - misbah.id
-    secretName: ingress
+    secretName: wordpress
   rules:
   - host: misbah.id
     http:
