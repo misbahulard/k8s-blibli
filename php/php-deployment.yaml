@@ -22,6 +22,7 @@ spec:
     matchLabels:
       app: wordpress
       tier: phpfpm
+  replicas: 2
   template:
     metadata:
       labels:

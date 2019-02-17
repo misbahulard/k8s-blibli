@@ -1,0 +1,28 @@
+global:
+  http_config:
+    tls_config:
+      insecure_skip_verify: true
+route:
+  group_by: ['alertname']
+  group_wait: 1m
+  group_interval: 1m
+  repeat_interval: 30m
+  receiver: 'my-slack'
+
+receivers:
+- name: 'my-slack'
+  slack_configs:
+    - api_url: 'https://hooks.slack.com/services/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'
+      color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
+      title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Prometheus Event Notification'
+      title_link: '{{ template "slack.default.titlelink" . }}'
+      pretext: '{{ .CommonAnnotations.summary }}'
+      text: |-
+        {{ range .Alerts }}
+          {{- if .Annotations.summary }}*Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`{{- end }}
+          *Description:* {{ .Annotations.description }}{{ .Annotations.message }}
+          *Graph:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:>{{ if or .Annotations.runbook .Annotations.runbook_url }} *Runbook:* <{{ .Annotations.runbook }}{{ .Annotations.runbook_url }}|:spiral_note_pad:>{{ end }}
+          *Details:*
+          {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+          {{ end }}
+        {{ end }}
